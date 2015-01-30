@@ -26,16 +26,16 @@ public:
     Pump();
     ~Pump();
     
-	bool ready() const;
+    bool ready() const;
     void setPower( bool power );
     bool getPower() const;
-	
+    
 private:
-	void _open();
-	void _close();
+    void _open();
+    void _close();
 
     bool _opened;
-	bool _power; 
+    bool _power; 
     
     GPIOPin* _gpioPin;
 };

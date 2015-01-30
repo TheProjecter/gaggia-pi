@@ -25,16 +25,16 @@ struct SDL_Rect;
 
 class Button {
 public:
-	Button(int x, int y, const std::string& file, SDL_PixelFormat* displayFormat);
-	~Button();
+    Button(int x, int y, const std::string& file, SDL_PixelFormat* displayFormat);
+    ~Button();
 
-	bool isClicked(int x, int y) const;
-	void draw(SDL_Surface* destination) const;
+    bool isClicked(int x, int y) const;
+    void draw(SDL_Surface* destination) const;
   
 private:
-	SDL_Surface* _buttonSurface;
-	SDL_Rect* _rect;
-	bool _good;
+    SDL_Surface* _buttonSurface;
+    SDL_Rect* _rect;
+    bool _good;
   
 }; // Button
 

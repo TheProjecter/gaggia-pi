@@ -24,15 +24,15 @@ public:
     Boiler();
     ~Boiler();
     
-	bool ready() const;
+    bool ready() const;
 
     // Set current power level (0..1)
     void setPower( double value );
     double getPower() const;
-	
+    
 private:
-	void _open();
-	void _close();
+    void _open();
+    void _close();
 
     bool _opened;
     

@@ -35,17 +35,17 @@ int kbhit()
 
 void nonblock( int nblock )
 {
-	struct termios state;
-	tcgetattr( STDIN_FILENO, &state );
+    struct termios state;
+    tcgetattr( STDIN_FILENO, &state );
 
-	if (nblock) {
-		state.c_lflag &= ~ICANON;
-		state.c_cc[VMIN] = 1;
-	} else {
-		state.c_lflag |= ICANON;
-	}
+    if (nblock) {
+        state.c_lflag &= ~ICANON;
+        state.c_cc[VMIN] = 1;
+    } else {
+        state.c_lflag |= ICANON;
+    }
 
-	tcsetattr( STDIN_FILENO, TCSANOW, &state );
+    tcsetattr( STDIN_FILENO, TCSANOW, &state );
 }
 
 //-----------------------------------------------------------------------------

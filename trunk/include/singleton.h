@@ -34,24 +34,24 @@ public:
     }
 
     // get the instance
-	static C& reference() {
-		assert(_instance && "access to an uninitialized singleton class");
-		return *_instance;
-	}
+    static C& reference() {
+        assert(_instance && "access to an uninitialized singleton class");
+        return *_instance;
+    }
 
     // get pointer
     static C* pointer() {
-		assert(_instance && "access to an uninitialized singleton class");
-		return _instance;
-	}
+        assert(_instance && "access to an uninitialized singleton class");
+        return _instance;
+    }
 
-	// Return true if singleton is initialized
-	static bool ready() {
-		return ( _instance != nullptr );
-	}
-	
+    // Return true if singleton is initialized
+    static bool ready() {
+        return ( _instance != nullptr );
+    }
+    
 private:
-	static C* _instance;
+    static C* _instance;
 };
 
 //-------------------------------------------------------------------------------------------------

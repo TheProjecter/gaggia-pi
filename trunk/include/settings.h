@@ -13,7 +13,9 @@
 //-----------------------------------------------------------------------------
 
 #include <fstream>
+#include <string>
 #include <mutex>
+
 
 //-----------------------------------------------------------------------------
 
@@ -39,40 +41,44 @@
 
 class Settings {
 public:
-	Settings();
-	~Settings();
+    Settings();
+    ~Settings();
 
-	bool ready() const;
+    bool ready() const;
 
-	void getRegulatorSettings( bool steam, double& iGain, double& pGain, double& dGain, double& targetTemperature ) const;
-	void getPreHeatingSettings( double& time, double& temperature ) const;
-	
-	double getFlowOffset30() const;
-	double getFlowOffset60() const;
+    void getRegulatorSettings( bool steam, double& iGain, double& pGain, double& dGain, double& targetTemperature ) const;
+    void getPreHeatingSettings( double& time, double& temperature ) const;
+    
+    double getFlowOffset30() const;
+    double getFlowOffset60() const;
+
+    std::string getPath() const;
 
 private:
-	bool _open();
-	void _close();
-	void _loadDefaults();
+    bool _open();
+    void _close();
+    void _loadDefaults();
 
-	// Regulator settings
-	double _iDefaultGain;
+    // Regulator settings
+    double _iDefaultGain;
     double _pDefaultGain;
     double _dDefaultGain;
-	double _iSteamGain;
+    double _iSteamGain;
     double _pSteamGain;
     double _dSteamGain;
 
-	double _defaultTargetTemperature;
-	double _steamTargetTemperature;
-	double _preHeatingTargetTemperature;
-	double _preHeatingTime;
-	
-	double _flowOffset30;
-	double _flowOffset60;
+    double _defaultTargetTemperature;
+    double _steamTargetTemperature;
+    double _preHeatingTargetTemperature;
+    double _preHeatingTime;
+    
+    double _flowOffset30;
+    double _flowOffset60;
 
-	bool _opened;
-	std::mutex* _mutex;
+    std::string _path;
+
+    bool _opened;
+    std::mutex* _mutex;
 
 }; // Settings
 

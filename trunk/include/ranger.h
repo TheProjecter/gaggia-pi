@@ -24,35 +24,35 @@ class GPIOPin;
 
 class Ranger {
 public:
-	Ranger();
-	~Ranger();
+    Ranger();
+    ~Ranger();
 
-	/// Returns most recent range measurement in metres
-	bool getRange( double& range ) const;
-	bool ready() const;
+    /// Returns most recent range measurement in metres
+    bool getRange( double& range ) const;
+    bool ready() const;
 
 private:
-	void _open();
-	void _close();
+    void _open();
+    void _close();
 
-	void _worker();
-	double _measureRange();
-	void _alertFunction( unsigned gpio, unsigned level, uint32_t tick );
+    void _worker();
+    double _measureRange();
+    void _alertFunction( unsigned gpio, unsigned level, uint32_t tick );
 
-	bool _opened;
-	double _timeLastRun;
-	double _range;
-	unsigned _count;
-	unsigned _timeout;
+    bool _opened;
+    double _timeLastRun;
+    double _range;
+    unsigned _count;
+    unsigned _timeout;
     uint32_t _timeStamp[2];
 
-	GPIOPin* _echoPin;
-	GPIOPin* _triggerPin;
+    GPIOPin* _echoPin;
+    GPIOPin* _triggerPin;
 
-	bool _run;
-	std::thread _thread;
-	mutable std::mutex _rangeMutex;
-	mutable std::mutex _countMutex;
+    bool _run;
+    std::thread _thread;
+    mutable std::mutex _rangeMutex;
+    mutable std::mutex _countMutex;
 };
 
 //-----------------------------------------------------------------------------

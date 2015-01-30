@@ -36,30 +36,30 @@ class Timer;
 class Gaggia {
 public:
     struct State {
-		enum Value {
-			Invalid,
-			Deactivated,       // Regulator deactivated
-			Heating,           // Regulator in pre-heating mode
-			Active,            // Regulator active in PID mode
-			Steam,             // Regulator active in Steam PID mode
-			Extracting,        // Extraction by user
-			ExtractingOneCup,  // Extracting by system (25 ml)
-			ExtractingTwoCups  // Extracting by sytsem (50 ml)
-		};
+        enum Value {
+            Invalid,
+            Deactivated,       // Regulator deactivated
+            Heating,           // Regulator in pre-heating mode
+            Active,            // Regulator active in PID mode
+            Steam,             // Regulator active in Steam PID mode
+            Extracting,        // Extraction by user
+            ExtractingOneCup,  // Extracting by system (25 ml)
+            ExtractingTwoCups  // Extracting by sytsem (50 ml)
+        };
     };
 
-	Gaggia( bool activeHeating = true, bool logging = false );
+    Gaggia( bool activeHeating = true, bool logging = false );
     ~Gaggia();
     
     bool ready() const;
-	void update();
+    void update();
 
     double getBoilerTemperature() const;
     double getBoilerTargetTemperature() const;
     
     double getWaterTankLevel() const;
     
-	double getIdleTime() const;
+    double getIdleTime() const;
     double getSystemTime() const;
     double getHeatingRestTime() const;
     
@@ -69,57 +69,57 @@ public:
     State::Value getState() const;
     
     void powerRegulator( bool power );
-	bool getPowerRegulator() const;
+    bool getPowerRegulator() const;
     
     void extractOneCup();
     void extractTwoCups();
 
-	void setSteamMode( bool steam );
-	bool getSteamMode() const;
+    void setSteamMode( bool steam );
+    bool getSteamMode() const;
       
 private:
-	void _initialize( bool activeHeating );
-	void _deinitialize();
-	void _worker(); 
+    void _initialize( bool activeHeating );
+    void _deinitialize();
+    void _worker(); 
 
-	void _setRegulatorSettings();
+    void _setRegulatorSettings();
 
-	void _openShotLog();
-	void _closeShotLog( double extractionTime );
+    void _openShotLog();
+    void _closeShotLog( double extractionTime );
 
-	std::string getDateTimeString() const;
-	std::string getLogString(double systemTime, double extractionTime, double temperature, double targetTemperature, double flowVolume, double flowVolumeCorrected, double flowSpeed, const std::string& flowStateText, const std::string& gaggiaStateText) const;
-	std::string getLogHeader() const;
-	std::string getStateString(State::Value state) const;
+    std::string getDateTimeString() const;
+    std::string getLogString(double systemTime, double extractionTime, double temperature, double targetTemperature, double flowVolume, double flowVolumeCorrected, double flowSpeed, const std::string& flowStateText, const std::string& gaggiaStateText) const;
+    std::string getLogHeader() const;
+    std::string getStateString(State::Value state) const;
 
     bool _ready;
-	bool _logging;
+    bool _logging;
 
-	Timer* _systemTimer;
-	Timer* _extractionTimer;
-	Timer* _idleTimer;
+    Timer* _systemTimer;
+    Timer* _extractionTimer;
+    Timer* _idleTimer;
 
     Flow* _flowSensor;
     Ranger* _tankSensor;
     Regulator* _regulator;
-	TSIC* _tsicSensor;
+    TSIC* _tsicSensor;
     Boiler* _boilerController;
     Pump* _pumpController;
 
     State::Value _currentState;
-	State::Value _oldState;
+    State::Value _oldState;
 
-	double _preHeatingTime;
-	double _flowOffsetOneCup;
-	double _flowOffsetTwoCups;
+    double _preHeatingTime;
+    double _flowOffsetOneCup;
+    double _flowOffsetTwoCups;
 
-	std::ofstream* _systemStateLog;
-	//std::ofstream* _shotStateLog;
-	std::vector<std::string> _shotStateLog;
+    std::ofstream* _systemStateLog;
+    //std::ofstream* _shotStateLog;
+    std::vector<std::string> _shotStateLog;
 
-	bool _run;
-	std::thread _thread;
-	mutable std::mutex _mutex;
+    bool _run;
+    std::thread _thread;
+    mutable std::mutex _mutex;
     
 }; // Gaggia
 

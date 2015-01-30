@@ -16,19 +16,20 @@
 #include <mutex>
 #include <atomic>
 
-#include "tsic.h"
-#include "boiler.h"
+//-----------------------------------------------------------------------------
+// Forward decls
+
+class TSIC;
+class Boiler;
 
 //-----------------------------------------------------------------------------
 
-/// This temperature regulator class manages the temperature sensor, boiler
-/// and PID temperature control loop on an independent thread
 class Regulator {
 public:
     Regulator(Boiler* boiler, TSIC* tsic);
     ~Regulator();
 
-	bool ready() const;
+    bool ready() const;
 
     /// Set the Proportional, Integral and Derivative gains
     void setPIDGains( double pGain, double iGain, double dGain );
@@ -36,41 +37,41 @@ public:
     void setTargetTemperature( double targetTemperature );
     double getTargetTemperature() const;
 
-	void setPower( bool power );
+    void setPower( bool power );
     bool getPower() const;
     
 private:
-	void _open();
-	void _close();
+    void _open();
+    void _close();
     void _worker();
     double _update( double error, double position, double iGain, double pGain, double dGain );
 
 private:
-	bool _opened;
+    bool _opened;
     bool _run;
     std::thread* _thread;
     std::mutex* _mutex;
 
     bool _power;
-    double _timeStep;	
+    double _timeStep;    
     
-    double _latestTemp;	
+    double _latestTemp;    
     double _latestPower;
 
-    TSIC* _temperature;	
-    Boiler* _boiler;	
-	
-	double _targetTemperature;
+    TSIC* _temperature;    
+    Boiler* _boiler;    
+    
+    double _targetTemperature;
 
-    double _dState;	
-    double _iState;	
-		   
-    double _iMax;	
-    double _iMin;	
-		   
-    double _iGain;	
-    double _pGain;	
-    double _dGain;	
+    double _dState;    
+    double _iState;    
+           
+    double _iMax;    
+    double _iMin;    
+           
+    double _iGain;    
+    double _pGain;    
+    double _dGain;    
 };
 
 //-----------------------------------------------------------------------------
