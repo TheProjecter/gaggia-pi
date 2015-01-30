@@ -45,11 +45,11 @@ protected:
 class ConsoleLog : public Log {
 public:
     ConsoleLog(LogSeverity minSeverity = LS_Warning);
-	~ConsoleLog();
+    ~ConsoleLog();
     void addMessage(LogSeverity logSeverity, std::ostringstream& oss);
 
 private:
-	mutable std::mutex _mutex;
+    mutable std::mutex _mutex;
 };
 
 //-----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public:
 
 private:
     std::ofstream* _file;
-	mutable std::mutex _mutex;
+    mutable std::mutex _mutex;
 };
 
 //-----------------------------------------------------------------------------
@@ -72,41 +72,41 @@ private:
 
 class Logger {
 public:
-	/// ctor
-	///
+    /// ctor
+    ///
     Logger();
 
-	/// dtor
-	///
+    /// dtor
+    ///
     ~Logger();
     
-	/// Enable log output on console
-	///
+    /// Enable log output on console
+    ///
     void enableConsoleLog(Log::LogSeverity severity = Log::LS_Warning);
 
-	/// Disable log output on console
-	///
+    /// Disable log output on console
+    ///
     void disableConsoleLog();
 
-	/// Add log output to given file
-	///
+    /// Add log output to given file
+    ///
     void addFileLog(const std::string& filename, Log::LogSeverity severity = Log::LS_Warning);
 
-	/// Remove log output from given file
-	///
+    /// Remove log output from given file
+    ///
     void removeFileLog(const std::string& filename);
 
-	/// Add a message to log
-	///
+    /// Add a message to log
+    ///
     void addMessage(Log::LogSeverity severity, std::ostringstream& oss);
 
 private:
-	/// Collection of attached logs
-	///
+    /// Collection of attached logs
+    ///
     std::map<std::string, Log*> _logmap;
 
-	/// Console log
-	///
+    /// Console log
+    ///
     Log* _console;
 
 };
@@ -121,11 +121,11 @@ private:
 
 #define LOGGER_TIME_FORMAT(oss)\
 {\
-	time_t rawtime;\
-	struct tm * timeinfo;\
-	time (&rawtime);\
-	timeinfo = localtime (&rawtime);\
-	oss << "[" << (timeinfo->tm_year + 1900) << "-" << (timeinfo->tm_mon + 1) << "-" << timeinfo->tm_mday << " " << timeinfo->tm_hour << ":" << timeinfo->tm_min << ":" << timeinfo->tm_sec << "] ";\
+    time_t rawtime;\
+    struct tm * timeinfo;\
+    time (&rawtime);\
+    timeinfo = localtime (&rawtime);\
+    oss << "[" << (timeinfo->tm_year + 1900) << "-" << (timeinfo->tm_mon + 1) << "-" << timeinfo->tm_mday << " " << timeinfo->tm_hour << ":" << timeinfo->tm_min << ":" << timeinfo->tm_sec << "] ";\
 }
 
 //-----------------------------------------------------------------------------
@@ -133,52 +133,52 @@ private:
 #define LogError(msg)\
 {\
     std::ostringstream oss;\
-	LOGGER_TIME_FORMAT(oss)\
+    LOGGER_TIME_FORMAT(oss)\
     oss << "ERROR: " << msg;\
-	oss << LOG_DESCRIPTION;\
+    oss << LOG_DESCRIPTION;\
     Singleton<Logger>::reference().addMessage(Log::LS_Error, oss);\
 }
 
 #define LogCritical(msg)\
 {\
     std::ostringstream oss;\
-	LOGGER_TIME_FORMAT(oss)\
-	oss << "CRITICAL: " << msg;\
-	oss << LOG_DESCRIPTION;\
+    LOGGER_TIME_FORMAT(oss)\
+    oss << "CRITICAL: " << msg;\
+    oss << LOG_DESCRIPTION;\
     Singleton<Logger>::reference().addMessage(Log::LS_Critical, oss);\
 }
 
 #define LogInfo(msg)\
 {\
     std::ostringstream oss;\
-	LOGGER_TIME_FORMAT(oss)\
+    LOGGER_TIME_FORMAT(oss)\
     oss<<"INFO: "<<msg;\
-	oss << "\n";\
+    oss << "\n";\
     Singleton<Logger>::reference().addMessage(Log::LS_Info, oss);\
 }
 
 #define LogMessage(msg)\
 {\
     std::ostringstream oss;\
-	LOGGER_TIME_FORMAT(oss)\
+    LOGGER_TIME_FORMAT(oss)\
     oss<<"MESSAGE: "<<msg;\
-	oss << "\n";\
+    oss << "\n";\
     Singleton<Logger>::reference().addMessage(Log::LS_Message, oss);\
 }
 
 #define LogWarning(msg)\
 {\
     std::ostringstream oss;\
-	LOGGER_TIME_FORMAT(oss)\
-	oss << "WARNING: " << msg;\
-	oss << LOG_DESCRIPTION;\
+    LOGGER_TIME_FORMAT(oss)\
+    oss << "WARNING: " << msg;\
+    oss << LOG_DESCRIPTION;\
     Singleton<Logger>::reference().addMessage(Log::LS_Warning, oss);\
 }
 
 #define LogCustom(msg)\
 {\
-	std::ostringstream oss;\
-	oss << msg << "\n";\
+    std::ostringstream oss;\
+    oss << msg << "\n";\
     Singleton<Logger>::reference().addMessage(Log::LS_Info, oss);\
 }
 

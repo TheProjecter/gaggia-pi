@@ -23,44 +23,44 @@ static const clockid_t g_timingClockId = CLOCK_MONOTONIC_RAW;
 //-----------------------------------------------------------------------------
 
 void delayms( unsigned ms ) {
-	struct timespec req, rem;
+    struct timespec req, rem;
+    req.tv_sec  = (time_t)(ms / 1000) ;
+    req.tv_nsec = (long)(ms % 1000) * 1000000L;
 
-	req.tv_sec  = (time_t)(ms / 1000) ;
-  	req.tv_nsec = (long)(ms % 1000) * 1000000L;
-
-  	nanosleep( &req, &rem );
+    nanosleep( &req, &rem );
 }
 
 //-----------------------------------------------------------------------------
 
-void delayus ( unsigned us ) {
-  	struct timeval now;
-  	gettimeofday( &now, 0 );
+void delayus( unsigned us ) {
+    struct timeval now;
+    gettimeofday( &now, 0 );
 
-	struct timeval delay, end;
-  	delay.tv_sec  = us / 1000000 ;
-  	delay.tv_usec = us % 1000000 ;
-  	timeradd( &now, &delay, &end );
+    struct timeval delay, end;
+    delay.tv_sec  = us / 1000000 ;
+    delay.tv_usec = us % 1000000 ;
+    timeradd( &now, &delay, &end );
 
-  	while ( timercmp( &now, &end, <) )
-		gettimeofday( &now, 0 );
+    while ( timercmp( &now, &end, <) ) {
+        gettimeofday( &now, 0 );
+    }
 }
 
 //-----------------------------------------------------------------------------
 
 double getClock() {
-	struct timespec now;
-	clock_gettime( g_timingClockId, &now );
+    struct timespec now;
+    clock_gettime( g_timingClockId, &now );
 
-	return (double)now.tv_sec + (double)now.tv_nsec * 1.0E-9;
+    return (double)now.tv_sec + (double)now.tv_nsec * 1.0E-9;
 }
 
 //-----------------------------------------------------------------------------
 
 Timer::Timer() 
-	:_startTime( 0.0 )
-	,_stopTime( 0.0 )
-	,_running( false )
+    :_startTime( 0.0 )
+    ,_stopTime( 0.0 )
+    ,_running( false )
 {
     reset();
 }
@@ -93,10 +93,10 @@ double Timer::stop() {
 double Timer::getElapsed() const {
     if ( _running ) {
         return getClock() - _startTime;
-	}
+    }
     else {
         return _stopTime - _startTime;
-	}
+    }
 }
 
 //-----------------------------------------------------------------------------

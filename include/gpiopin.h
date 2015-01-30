@@ -25,9 +25,9 @@ public:
 
     /// Supported edge trigger modes
     enum Edge {
-		Falling = FALLING_EDGE,
-		Rising  = RISING_EDGE,
-		Both    = EITHER_EDGE
+        Falling = FALLING_EDGE,
+        Rising  = RISING_EDGE,
+        Both    = EITHER_EDGE
     };
 
     /// Set the pin to be an output (true) or input (false)
@@ -59,9 +59,9 @@ public:
 
     /// Notification function type
     typedef std::function<void(
-		unsigned pin,
-		bool     level,
-		unsigned tick
+        unsigned pin,
+        bool     level,
+        unsigned tick
     )> EdgeFunc;
 
     /// Set edge notification

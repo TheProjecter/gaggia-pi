@@ -15,8 +15,8 @@
 #include <iostream>
 
 extern "C" {
-	#include <pigpiod_if.h>
-	#include <pigpio.h>
+    #include <pigpiod_if.h>
+    #include <pigpio.h>
 }
 
 //-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ extern "C" {
 /// Singleton class to manage initialisation of PIGPIO
 class PIGPIOManager {
 public:
-	PIGPIOManager();
+    PIGPIOManager();
     ~PIGPIOManager();
 
     /// Returns true if PIPGIO is available

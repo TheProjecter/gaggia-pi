@@ -44,7 +44,7 @@ private:
     void _close();
     void _alertFunction( int gpio, int level, uint32_t tick );
 
-	GPIOPin* _pin;
+    GPIOPin* _pin;
 
     unsigned _gpio;        ///< the GPIO pin used for the sensor
     bool     _opened;      ///< true if the sensor is open
@@ -53,10 +53,10 @@ private:
 
     uint32_t _count;       ///< number of bits received in current packet
     uint32_t _lastLow;     ///< time when GPIO pin last went low (us)
-	uint32_t _lastHigh;
+    uint32_t _lastHigh;
     int      _word;        ///< used to consolidate incoming packet bits
 
-	bool _running;
+    bool _running;
 
     /// Mutex to control access to the sensor data
     mutable std::mutex _mutex;

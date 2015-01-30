@@ -95,7 +95,7 @@ static int tsicDecode( int packet0, int packet1 ) {
         // all looks good
         return temp;
     } 
-	else {
+    else {
         // parity looked good, but the value is out of the valid range
         return INVALID_TEMP;
     }
@@ -104,19 +104,19 @@ static int tsicDecode( int packet0, int packet1 ) {
 //-----------------------------------------------------------------------------
 
 TSIC::TSIC( unsigned gpio ) 
-	:_pin( 0 )
-	,_gpio( gpio )
+    :_pin( 0 )
+    ,_gpio( gpio )
     ,_opened( false )
     ,_valid( false )
     ,_temperature( 0.0 )
     //,_callback( -1 )
     ,_count( 0 )
     ,_lastLow( 0 )
-	,_lastHigh( 0 )
+    ,_lastHigh( 0 )
     ,_word( 0 )
-	,_running( false )
+    ,_running( false )
 {
-	_open();
+    _open();
 }
 
 //-----------------------------------------------------------------------------
@@ -129,47 +129,47 @@ TSIC::~TSIC() {
 
 void TSIC::_open() {
     if ( !Singleton<PIGPIOManager>::ready() ) {
-		LogError("PIGPIOManager not ready, aborting TSIC initialization");
+        LogError("PIGPIOManager not ready, aborting TSIC initialization");
         return;
-	}
-
-	_pin = new GPIOPin( _gpio );
-
-	if ( !_pin->ready() ) {
-		LogError("TSIC GPIO-Pin could not be opened");
-		_close();
-		return;
-    }
-	
-	if ( !_pin->setOutput( false ) ) {
-		LogError("TSIC GPIO-Pin could not be set as input");
-		_close();
-		return;
     }
 
-	if ( set_pull_up_down( 15, 2 ) != 0) {
-		LogError("Could not register pull down resistor for TSIC pin");
-		_close();
-		return;
-	}
+    _pin = new GPIOPin( _gpio );
 
-	if ( !_pin->setEdgeTrigger( GPIOPin::Both ) ) {
-		LogError("Could not register edge trigger for TSIC pin");
-		_close();
-		return;
-	}
+    if ( !_pin->ready() ) {
+        LogError("TSIC GPIO-Pin could not be opened");
+        _close();
+        return;
+    }
+    
+    if ( !_pin->setOutput( false ) ) {
+        LogError("TSIC GPIO-Pin could not be set as input");
+        _close();
+        return;
+    }
 
-	if ( !_pin->edgeFuncRegister( std::bind( &TSIC::_alertFunction, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ) ) ) {
-		LogError("Could not register callback for TSIC pin");
-		_close();
-		return;
-	}
+    if ( set_pull_up_down( 15, 2 ) != 0) {
+        LogError("Could not register pull down resistor for TSIC pin");
+        _close();
+        return;
+    }
+
+    if ( !_pin->setEdgeTrigger( GPIOPin::Both ) ) {
+        LogError("Could not register edge trigger for TSIC pin");
+        _close();
+        return;
+    }
+
+    if ( !_pin->edgeFuncRegister( std::bind( &TSIC::_alertFunction, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ) ) ) {
+        LogError("Could not register callback for TSIC pin");
+        _close();
+        return;
+    }
 
     // Wait for a packet to arrive
     bool success = false;
     for ( size_t count = 0; !success & ( count < 10 ); ++count ) {
         // Sample rate is 10Hz, so we need to wait at least 1/10th second
-		delayms( 100 );
+        delayms( 100 );
 
         // Attempt to read the value
         double value = 0.0;
@@ -179,7 +179,7 @@ void TSIC::_open() {
     // Did we receive some data?
     if ( !success ) {
         LogError("Could not take a sampling reading for TSIC sensor, aborting TSIC initialization");
-		_close();
+        _close();
         return;
     }
 
@@ -190,7 +190,7 @@ void TSIC::_open() {
 //-----------------------------------------------------------------------------
 
 void TSIC::_close() {
-	delete _pin;
+    delete _pin;
 }
 
 //-----------------------------------------------------------------------------
@@ -204,36 +204,36 @@ bool TSIC::getDegrees( double & value ) const {
 //-----------------------------------------------------------------------------
 
 bool TSIC::ready() const {
-	return _opened;
+    return _opened;
 }
 
 //-----------------------------------------------------------------------------
 
 void TSIC::_alertFunction( int gpio, int level, uint32_t tick ) {
     if ( level == 1 ) {
-		_lastHigh = tick;
+        _lastHigh = tick;
 
-		/*if ( _lastLow == 0 ) {
-			return;
-		}*/
+        /*if ( _lastLow == 0 ) {
+            return;
+        }*/
 
         // Bus went high
         const uint32_t timeLow = tick - _lastLow;
 
-		if ( timeLow < TSIC_FRAME_US / 2 ) {
+        if ( timeLow < TSIC_FRAME_US / 2 ) {
             // High bit
             _word = (_word << 1) | 1;
         } 
-		else if ( timeLow < TSIC_FRAME_US ) {
+        else if ( timeLow < TSIC_FRAME_US ) {
             // Low bit
             _word <<= 1;
-		} 
-		else if ( timeLow > TSIC_FRAME_US * 2 ) {
+        } 
+        else if ( timeLow > TSIC_FRAME_US * 2 ) {
             // Low for more than one frame, which should never happen and
             // must therefore be an invalid bit: start again
             _count = 0;
             _word  = 0;
-			return;
+            return;
         }
 
         if ( ++_count == TSIC_BITS ) {
@@ -253,9 +253,9 @@ void TSIC::_alertFunction( int gpio, int level, uint32_t tick ) {
                     _temperature = static_cast<double>( result ) / static_cast<double>( SCALE_FACTOR );
                     _valid = true;
                 } 
-				else {
+                else {
                     _valid = false;
-				}
+                }
             }
 
             // prepare to receive a new packet
@@ -263,19 +263,19 @@ void TSIC::_alertFunction( int gpio, int level, uint32_t tick ) {
             _word = 0;
         }
     } 
-	else {
-		 // bus went low
+    else {
+         // bus went low
         _lastLow = tick;
 
-		// calculate time spent high
-	    const uint32_t timeHigh = tick - _lastHigh;
-			
-	    // If the bus has been high for more than one frame, reset the
-	    // counters to start a new packet
-	    if ( timeHigh > TSIC_FRAME_US * 2 ) {
-	        _count = 0;
-	        _word  = 0;
-	    }
+        // calculate time spent high
+        const uint32_t timeHigh = tick - _lastHigh;
+            
+        // If the bus has been high for more than one frame, reset the
+        // counters to start a new packet
+        if ( timeHigh > TSIC_FRAME_US * 2 ) {
+            _count = 0;
+            _word  = 0;
+        }
     }
 }
 
