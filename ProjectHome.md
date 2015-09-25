@@ -1,0 +1,1 @@
+Gaggia-Pi is an application to control an espresso machine with the help of a Raspberry PI. A lot of the hardware controllers are based on the work of James Ward: https://code.google.com/p/espiresso/
